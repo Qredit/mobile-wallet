@@ -237,16 +237,16 @@ ion-fab.pull-footer {
 ion-app {
   &.dark-theme {
     .toggle-icon {
-      background-color: #0d1632;
+      background-color: #370707;
 
       .toggle-inner {
-        background-color: #2a375e;
+        background-color: #61161c;
       }
     }
 
     .toggle-checked {
       .toggle-icon {
-        background-color: #0d1632;
+        background-color: #370707;
 
         .toggle-inner {
           background-color: lighten(color($darkColors, primary-background, base), 50%);
@@ -274,8 +274,8 @@ ion-app {
 
       ion-list > .item {
         .icon {
-          color: #4744f5;
-          -webkit-text-stroke: 0.4px #4744f5;
+          color: #931821;
+          -webkit-text-stroke: 0.4px #931821;
         }
 
         .label {
@@ -391,8 +391,8 @@ ion-app {
 
       .list .icon, .menu-inner .icon,
       .action-sheet-icon {
-        color: #4744f5;
-        -webkit-text-stroke: 0.4px #4744f5;
+        color: #931821;
+        -webkit-text-stroke: 0.4px #931821;
       }
     }
 
