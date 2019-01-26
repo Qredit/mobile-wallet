@@ -199,16 +199,13 @@ export class TransactionSendPage implements OnInit {
   }
 
   private validForm(): boolean {
-    let isValid: boolean;
-    for (const name in this.sendTransactionHTMLForm.form.controls) {
-      if (name === 'recipientAddress') {
-        continue;
-      }
-      const control = this.sendTransactionHTMLForm.form.controls[name];
-      isValid = control.valid;
-      if (!isValid) {
-        break;
-      }
+    let isValid = true;
+    if (
+      !this.sendTransactionHTMLForm.form.controls['amount'].value
+      || this.sendTransactionHTMLForm.form.controls['amount'].value <= 0
+      || this.sendTransactionHTMLForm.form.controls['smartBridge'].length > 64
+    ) {
+      isValid = false;
     }
 
     return isValid;
@@ -263,6 +260,7 @@ export class TransactionSendPage implements OnInit {
       this.confirmTransaction.open(transaction, result.keys, result.checkerResult);
     }, () => {
       this.toastProvider.error('TRANSACTIONS_PAGE.CREATE_TRANSACTION_ERROR');
+      this.hasNotSent();
     });
   }
 
