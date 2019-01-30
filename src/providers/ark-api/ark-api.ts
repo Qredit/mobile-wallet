@@ -31,7 +31,7 @@ export class ArkApiProvider {
   private _fees: arkts.Fees;
   private _delegates: arkts.Delegate[];
 
-  public qreditjs = require('qreditjs');
+  public arkjs = require('arkjs');
 
   constructor(
     private userDataProvider: UserDataProvider,
@@ -81,7 +81,7 @@ export class ArkApiProvider {
     }
 
     this._network = network;
-    this.qreditjs.crypto.setNetworkVersion(this._network.version);
+    this.arkjs.crypto.setNetworkVersion(this._network.version);
 
     this._api = new arkts.Client(this._network);
     this.findGoodPeer();
@@ -273,17 +273,17 @@ export class ArkApiProvider {
       transaction.signature = null;
       transaction.id = null;
 
-      const keys = this.qreditjs.crypto.getKeys(key, jsNetwork);
-      this.qreditjs.crypto.sign(transaction, keys);
+      const keys = this.arkjs.crypto.getKeys(key, jsNetwork);
+      this.arkjs.crypto.sign(transaction, keys);
 
       secondPassphrase = secondKey || secondPassphrase;
 
       if (secondPassphrase) {
-        const secondKeys = this.qreditjs.crypto.getKeys(secondPassphrase, jsNetwork);
-        this.qreditjs.crypto.secondSign(transaction, secondKeys);
+        const secondKeys = this.arkjs.crypto.getKeys(secondPassphrase, jsNetwork);
+        this.arkjs.crypto.secondSign(transaction, secondKeys);
       }
 
-      transaction.id = this.qreditjs.crypto.getId(transaction);
+      transaction.id = this.arkjs.crypto.getId(transaction);
 
       observer.next(transaction);
       observer.complete();
