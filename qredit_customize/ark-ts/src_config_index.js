@@ -5,7 +5,7 @@ export default {
     mainnet: {
       bip32: {
         private: 0x4358394,
-        public: ,
+        public: 0x43587cf,
       },
       name: 'mainnet',
       nethash: '5e67037fd290ba7ab378e84a591d251c46eb9770eb134983771fd602233bf193',
