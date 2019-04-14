@@ -57,7 +57,7 @@
     "FAST_EASY": "Snabb och Enkel",
     "GET_STARTED": "Kom igång",
     "SECURITY": "Säkerhet",
-    "TEXT_1": "Vi förser dig med alla verktyg du behöver för att hantera dina Qredit-tokens, när som helst, överallt, i hela världen!",
+    "TEXT_1": "Vi förser dig med alla verktyg du behöver för att hantera dina Qredit-coins, när som helst, överallt, i hela världen!",
     "TEXT_2": "All din känsliga data är säkert lagrad med PBKDF2-algoritmen och krypterad med AES-256 som beskyddas av din PIN-kod",
     "TEXT_3": "Svep mellan profiler och plånböcker, kolla dina saldon, skicka och ta emot tillgångar och mycket mera",
     "WELCOME": "Välkommen ombord"
@@ -65,7 +65,7 @@
   "SIGN_IN_PAGE": {
     "ARK_WALLET": "Qredit Plånbok",
     "CREATE_PROFILE": "Skapa en profil",
-    "SLOGAN": "Välkommen till Qredit-Ekosystemet"
+    "SLOGAN": "Välkommen till Qredit"
   },
   "SIGN_OUT_PROFILE_TEXT": "Logga ut från Profilen?",
   "MARKETS_PAGE": {
@@ -106,7 +106,6 @@
     "PIN_UPDATED_TEXT": "Din PIN har uppdaterats",
     "TYPE_PIN_ENCRYPT_PASSPHRASE": "Skriv in din PIN för att kryptera lösenordsfrasen",
     "TYPE_PIN_SIGN_TRANSACTION": "Skriv in din PIN för att signera transaktionen",
-    "TYPE_PIN_ENCRYPT_PASSPHRASE": "Skriv in din PIN för att kryptera lösenordsfrasen",
     "WRONG": "Vänligen ange rätt PIN"
   },
   "PROFILES_PAGE": {

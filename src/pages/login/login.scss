@@ -1,9 +1,9 @@
 page-login {
   ion-content {
-    background: url('../assets/img/light/login/login-pattern.png') repeat;
-    background-size: contain;
+    background: url('../assets/img/light/login/login-pattern.gif') repeat;
+    background-size: initial;
     background-repeat:no-repeat;
-    background-position: top center;
+    background-position: bottom 200px center;
 
     .image-container {
       overflow: hidden;
@@ -44,10 +44,10 @@ page-login {
 .dark-theme {
   page-login {
     ion-content {
-      background: url('../assets/img/dark/login/login-pattern.png') repeat;
-      background-size: contain;
+      background: url('../assets/img/dark/login/login-pattern.gif') repeat;
+      background-size: initial;
       background-repeat:no-repeat;
-      background-position: top center;
+      background-position: bottom 200px center;
       background-color: color($darkColors, primary-background, base);
     }
   }

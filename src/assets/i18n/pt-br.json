@@ -45,9 +45,10 @@
       "VOTE_FETCH_ERROR": "Não foi possível buscar o voto atual",
       "WARNING_SELECT_WALLET_FIRST": "Você precisa selecionar uma carteira primeiro para ativar o processo de voto"
     },
-    "DELETE": "Delete",
+    "DELETE": "Deletar",
     "DONE": "Feito",
     "EDIT": "Editar",
+    "SIGN_OUT": "Sair",
     "EXIT_APP_TEXT": "Deseja sair do App?",
     "FAILED": "Falhou",
     "GENERAL": "Geral",
@@ -65,7 +66,7 @@
     "SIGN_IN_PAGE": {
       "ARK_WALLET": "Carteira Qredit",
       "CREATE_PROFILE": "Criar um perfil",
-      "SLOGAN": "Bem vindo ao Ecossistema Qredit"
+      "SLOGAN": "Bem vindo ao Qredit"
     },
     "SIGN_OUT_PROFILE_TEXT": "Sair do perfil?",
     "MARKETS_PAGE": {
@@ -86,7 +87,8 @@
       "NETWORK_STATUS": "Status de Rede",
       "NETWORK_TYPE": "Tipo de Rede",
       "INTERNET_DESCONNECTED": "Não foi possível conectar-se à Internet",
-      "PEER": "Peer"
+      "PEER": "Peer",
+      "VERSION": "Versão"
     },
     "NEXT": "Próximo",
     "NO": "Não",
@@ -192,7 +194,7 @@
       "ADD_WALLET_TEXT": "Para importar ou criar uma carteira clique no botão abaixo",
       "ADDRESS": "Endereço",
       "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "A frase secreta secundária foi encriptada com sucesso",
-      "BACKUP_ACCOUNT": "IMPORTANTE! Faça o backup desta 'frase secreta' de forma segura, sem essas palavras você não pode restaurar sua carteira ou enviar transações e TODOS OS TOKENS Qredit SERÃO PERDIDOS",
+      "BACKUP_ACCOUNT": "IMPORTANTE! Faça o backup desta 'frase secreta' de forma segura, sem essas palavras você não pode restaurar sua carteira ou enviar transações e TODOS OS TOKENS ARK SERÃO PERDIDOS",
       "BACKUP_PASSPHRASE": "Faça backup da frase secreta de forma segura, sem essas palavras você não conseguirá restaurar sua carteira.",
       "BACKUP_SECOND_PASSPHRASE": "Faça backup da frase secreta secundária de forma segura, sem essas palavras você não conseguirá mover seus fundos.",
       "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Você pode editar para uma frase secreta de sua escolha. Lembre-se de fazer backup com segurança, você precisará re-digitar para validação.",

@@ -21,20 +21,11 @@
             <ion-col>
               <button ion-button color="primary" (click)="scanQRCode()" text-center class="button-continue">{{ 'WALLETS_PAGE.SCAN_QRCODE' | translate }}</button>
             </ion-col>
-          </ion-row>
-          <ion-row>
             <ion-col>
-              <p>
-                {{ 'WALLETS_PAGE.TYPE_PASSPHRASE_OR_ADDRESS' | translate | translateCut:0 }}
-                <a (click)="openManualImportPage('passphrase')" tappable>
-                  {{ 'WALLETS_PAGE.TYPE_PASSPHRASE_OR_ADDRESS' | translate | translateCut:1 }}
-                </a>
-                {{ 'WALLETS_PAGE.TYPE_PASSPHRASE_OR_ADDRESS' | translate | translateCut:2 }}
-                <a (click)="openManualImportPage('address')" tappable>
-                  {{ 'WALLETS_PAGE.TYPE_PASSPHRASE_OR_ADDRESS' | translate | translateCut:3 }}
-                </a>
-                {{ 'WALLETS_PAGE.TYPE_PASSPHRASE_OR_ADDRESS' | translate | translateCut:4 }}
-              </p>
+              <button ion-button color="primary" (click)="openManualImportPage('passphrase')" text-center class="button-continue">{{ 'PASSPHRASE' | translate }}</button>
+            </ion-col>
+            <ion-col>
+              <button ion-button color="primary" (click)="openManualImportPage('address')" text-center class="button-continue">{{ 'WATCH_ONLY' | translate }}</button>
             </ion-col>
           </ion-row>
         </ion-grid>

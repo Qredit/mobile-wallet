@@ -72,7 +72,7 @@
   "SIGN_IN_PAGE": {
     "ARK_WALLET": "Qredit peněženka",
     "CREATE_PROFILE": "Vytvořit profil",
-    "SLOGAN": "Vítej do Qredit plošina"
+    "SLOGAN": "Vítej do Qredit"
   },
   "SIGN_OUT_PROFILE_TEXT": "Odhlásit se z profilu?",
   "MARKETS_PAGE": {
@@ -200,9 +200,9 @@
     "ADD_WALLET_TEXT": "Pro vytvoření nové peněženky nebo její import klikni na tlačítko níže",
     "ADDRESS": "Adresa",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "Druhá kontrolní fráze byla úspěšně zakódovaná",
-    "BACKUP_ACCOUNT": "DŮLEŽITÉ! Bezpečně si zazálohuj 'tajnou kontrolní frázi', bez ní nedokážeš obnovit svou peněženku nebo aktivovat peněženku na jiném zařízení, takže VŠECHNY TVOJE Qredit PENÍZE BUDOU NAVŽDY ZTRACENY.",
+    "BACKUP_ACCOUNT": "DŮLEŽITÉ! Bezpečně si zazálohuj 'tajnou kontrolní frázi', bez ní nedokážeš obnovit svou peněženku nebo aktivovat peněženku na jiném zařízení, takže VŠECHNY TVOJE ARK PENÍZE BUDOU NAVŽDY ZTRACENY.",
     "BACKUP_PASSPHRASE": "Zazálohuj si bezpečně kontrolní frázi, bez ní nedokážeš obnovit svou peněženku.",
-    "BACKUP_SECOND_PASSPHRASE": "Zazálohuj si bezpečně kontrolní frázi, bez ní nemůžeš disponovat svími Qredit penězi.",
+    "BACKUP_SECOND_PASSPHRASE": "Zazálohuj si bezpečně kontrolní frázi, bez ní nemůžeš disponovat svími ARK penězi.",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Můžeš editovat a vytvořit si tak heslo jaké chceš. Pamatuj, že si ho musíš dobře zazálohovat. Pro kontrolu ho budeš zadávat ještě jednou.",
     "BALANCE": "Zůstatek",
     "BIP38_SEED": "BIP38 Seed",

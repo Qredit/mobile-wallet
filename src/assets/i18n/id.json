@@ -94,15 +94,15 @@
     "FAST_EASY": "Cepat dan Mudah",
     "GET_STARTED": "Segera Mulai",
     "SECURITY": "Keamanan",
-    "TEXT_1": "Kami menyediakan semua alat yang Anda butuhkan untuk mengelola token ARK Anda, kapan saja, di mana saja, di seluruh dunia!",
+    "TEXT_1": "Kami menyediakan semua alat yang Anda butuhkan untuk mengelola token Qredit Anda, kapan saja, di mana saja, di seluruh dunia!",
     "TEXT_2": "Semua data sensitif Anda disimpan dengan aman menggunakan algoritma PBKDF2 dan enkripsi AES-256 yang dilindungi oleh Kode PIN Anda",
     "TEXT_3": "Geser antara profil dan dompet, periksa saldo Anda, kirim dan terima dana dan banyak lagi",
     "WELCOME": "Selamat Bergabung"
   },
   "SIGN_IN_PAGE": {
-    "ARK_WALLET": "Dompet ARK",
+    "ARK_WALLET": "Dompet Qredit",
     "CREATE_PROFILE": "Tambah profil",
-    "SLOGAN": "Selamat Datang di Ekosistem ARK"
+    "SLOGAN": "Selamat Datang di Qredit"
   },
   "SIGN_OUT_PROFILE_TEXT": "Keluar dari Profil?",
   "MARKETS_PAGE": {

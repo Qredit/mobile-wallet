@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -8,15 +9,22 @@ import { UserDataProvider } from '@providers/user-data/user-data';
 import { StorageProvider } from '@providers/storage/storage';
 import { ToastProvider } from '@providers/toast/toast';
 
-import { Transaction, TranslatableObject } from '@models/model';
+import { Transaction, TranslatableObject, BlocksEpochResponse } from '@models/model';
 
 import * as arkts from 'ark-ts';
 import lodash from 'lodash';
+import moment from 'moment';
 import * as constants from '@app/app.constants';
 import arktsConfig from 'ark-ts/config';
 import { ArkUtility } from '../../utils/ark-utility';
 import { Delegate } from 'ark-ts';
-import { StoredNetwork } from '@models/stored-network';
+import { StoredNetwork, FeeStatistic } from '@models/stored-network';
+
+interface NodeConfigurationResponse {
+  data: {
+    feeStatistics: FeeStatistic[]
+  };
+}
 
 @Injectable()
 export class ArkApiProvider {
@@ -34,6 +42,7 @@ export class ArkApiProvider {
   public arkjs = require('arkjs');
 
   constructor(
+    private httpClient: HttpClient,
     private userDataProvider: UserDataProvider,
     private storageProvider: StorageProvider,
     private toastProvider: ToastProvider) {
@@ -53,6 +62,12 @@ export class ArkApiProvider {
 
   public get api() {
     return this._api;
+  }
+
+  public get feeStatistics () {
+    if (!lodash.isUndefined(this._network.feeStatistics)) { return Observable.of(this._network.feeStatistics); }
+
+    return this.fetchFeeStatistics();
   }
 
   public get fees() {
@@ -85,6 +100,13 @@ export class ArkApiProvider {
 
     this._api = new arkts.Client(this._network);
     this.findGoodPeer();
+
+    // Fallback if the fetchEpoch fail
+    this._network.epoch = arktsConfig.blockchain.date;
+    this.userDataProvider.onUpdateNetwork$.next(this._network);
+
+    this.fetchFees().subscribe();
+    this.fetchEpoch().subscribe();
   }
 
   public async findGoodPeer() {
@@ -101,6 +123,11 @@ export class ArkApiProvider {
 
   private async tryGetFallbackPeer() {
     if (await this.findGoodPeerFromList(this.network.peerList)) {
+      return;
+    }
+
+    // Custom network
+    if (!this.network.type) {
       return;
     }
 
@@ -150,11 +177,13 @@ export class ArkApiProvider {
       const peerConfigResponses = await Promise.all(configChecks.map(p => p.catch(e => e)));
       for (const peerId in peerConfigResponses) {
         const config = peerConfigResponses[peerId];
-        const apiConfig = lodash.get(config, 'data.plugins["@arkecosystem/core-api"]');
-        if (apiConfig && apiConfig.enabled && apiConfig.port) {
-          const peer = preFilteredPeers[peerId];
-          peer.port = apiConfig.port;
-          filteredPeers.push(peer);
+        if (config && config.data) {
+          const apiConfig: any = lodash.find(config.data.plugins, (_, key) => key.split('/').reverse()[0] === 'core-api');
+          if (apiConfig && apiConfig.enabled && apiConfig.port) {
+            const peer = preFilteredPeers[peerId];
+            peer.port = apiConfig.port;
+            filteredPeers.push(peer);
+          }
         }
       }
     }
@@ -270,6 +299,10 @@ export class ArkApiProvider {
         return observer.complete();
       }
 
+      const epochTime = moment(this._network.epoch).utc().valueOf();
+      const now = moment().valueOf();
+      transaction.timestamp = Math.floor((now - epochTime) / 1000);
+
       transaction.signature = null;
       transaction.id = null;
 
@@ -294,22 +327,19 @@ export class ArkApiProvider {
     return Observable.create((observer) => {
       const compressTransaction = JSON.parse(JSON.stringify(transaction));
       this._api.transaction.post(compressTransaction, peer).subscribe((result: arkts.TransactionPostResponse) => {
-        let successful = false;
-        if (this._network.isV2) {
-          successful = result.data.accept && result.data.accept.indexOf(transaction.id) !== -1;
-        } else {
-          successful = result.transactionIds && result.transactionIds.indexOf(transaction.id) !== -1;
-        }
-
-        if (successful) {
+        if (this.isSuccessfulResponse(result)) {
           this.onSendTransaction$.next(transaction);
+
           if (broadcast) {
             if (!this._network.isV2) {
               this.broadcastTransaction(transaction);
             }
-            this.toastProvider.success('API.TRANSACTION_SENT');
           }
+
           observer.next(transaction);
+          if (this._network.isV2 && !result.data.accept.length && result.data.broadcast.length) {
+            this.toastProvider.warn('TRANSACTIONS_PAGE.WARNING.BROADCAST');
+          }
         } else {
           if (broadcast) {
             this.toastProvider.error('API.TRANSACTION_FAILED');
@@ -329,6 +359,16 @@ export class ArkApiProvider {
                .delegate
                .get({publicKey: publicKey})
                .map(response => response && response.success ? response.delegate : null);
+  }
+
+
+  private isSuccessfulResponse (response) {
+    if (!this._network.isV2) {
+      return response.success && response.transactionIds;
+    } else {
+      const { data, errors } = response;
+      return data && data.invalid.length === 0 && errors === null;
+    }
   }
 
   private broadcastTransaction(transaction: arkts.Transaction) {
@@ -358,6 +398,29 @@ export class ArkApiProvider {
     });
 
     this.fetchFees().subscribe();
+    this.fetchFeeStatistics().subscribe();
+  }
+
+  private fetchFeeStatistics(): Observable<FeeStatistic[]> {
+    if (!this._network || !this._network.isV2) {
+      return Observable.empty();
+    }
+
+    return Observable.create((observer) => {
+      this.httpClient.get(`${this._network.getPeerAPIUrl()}/api/v2/node/configuration`).subscribe((response: NodeConfigurationResponse) => {
+        const data = response.data;
+        this._network.feeStatistics = data.feeStatistics;
+        observer.next(this._network.feeStatistics);
+      }, e => observer.error(e));
+    });
+  }
+
+  private fetchEpoch(): Observable<BlocksEpochResponse> {
+    return this.httpClient.get(`${this._network.getPeerAPIUrl()}/api/blocks/getEpoch`).map((response: BlocksEpochResponse) => {
+      this._network.epoch = new Date(response.epoch);
+      this.userDataProvider.onUpdateNetwork$.next(this._network);
+      return response;
+    });
   }
 
   private fetchFees(): Observable<arkts.Fees> {

@@ -34,14 +34,24 @@ Qredit’s mobile wallet is a hybrid application (using the same codebase for An
 - Current market value, along with weekly movements.
 - Support for showing data in different FIAT currencies.
 
+
 ## Build
 
-First follow the steps below to install the dependencies:
+Install the dependencies and build the APK:
 
 ```bash
 $ npm install -g ionic cordova@7.1.0
 $ npm install
-$ ionic cordova prepare
+$ ionic cordova prepare android
+$ ionic cordova plugin rm cordova-plugin-console
+$ ionic cordova build --release android
+```
+
+Sign (android) APK:
+
+```bash
+$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore platforms/android/app/build/outputs/apk/release/my-release-key.keystore platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk HodlerCompany
+$ zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk Qredit.apk
 ```
 
 Run on device:
@@ -78,6 +88,7 @@ To run the E2E (end to end) tests:
 ```bash
 $ npm run test:e2e
 ```
+
 
 ## Security
 

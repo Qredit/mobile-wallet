@@ -97,10 +97,10 @@
   },
   "SIGN_IN_PAGE": {
     "ARK_WALLET": "Portefeuille Qredit",
-    "CREATE_PROFILE": "Créer un profile",
-    "SLOGAN": "Bienvenue dans l'Ecosystème Qredit"
+    "CREATE_PROFILE": "Créer un profil",
+    "SLOGAN": "Bienvenue dans l'Qredit"
   },
-  "SIGN_OUT_PROFILE_TEXT": "Se déconnecter du profile ?",
+  "SIGN_OUT_PROFILE_TEXT": "Se déconnecter du profil ?",
   "MARKETS_PAGE": {
     "MARKET_CAP": "Capitalisation",
     "MARKET_DATA": "Donnée du marché",
@@ -144,7 +144,7 @@
     "TYPE_PIN_SIGN_TRANSACTION": "Saisissez votre code PIN pour signer la transaction",
     "UPDATING": "Mise à jour du code PIN pour tous les profils et portefeuilles...",
     "WRONG": "Veuillez entrer le bon code PIN",
-    "WEAK_PIN": "NIP faible",
+    "WEAK_PIN": "Code PIN faible",
     "WEAK_PIN_DETAIL": "Le code PIN que vous avez saisi est considéré comme faible et facile à deviner. Voulez-vous vraiment l'utiliser ?"
   },
   "PROFILES_PAGE": {
@@ -182,7 +182,8 @@
     "NOTIFICATIONS": "Notifications",
     "SETTINGS": "Paramètres",
     "VERSION": "Version",
-    "WALLET_BACKUP": "Sauvegarde du portefeuille"
+    "WALLET_BACKUP": "Sauvegarde du portefeuille",
+    "WORDLIST_LANGUAGE": "Langue de phrase secrète"
   },
   "SHOW_ADVANCED": "Afficher les paramètres avancés",
   "SKIP": "Passer",
@@ -254,7 +255,7 @@
     "ADD_WALLET_TEXT": "Pour importer ou créer un portefeuille, cliquez sur le bouton ci-dessous",
     "ADDRESS": "Adresse",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "Le deuxième mot de passe a été crypté avec succès",
-    "BACKUP_ACCOUNT": "IMPORTANT! Sauvegardez cette 'phrase d'authentification secrète' en toute sécurité, sans ces mots vous ne pouvez pas restaurer votre portefeuille ou envoyer des transactions et TOUS LES JETONS Qredit SERONT PERDUS.",
+    "BACKUP_ACCOUNT": "IMPORTANT! Sauvegardez cette 'phrase d'authentification secrète' en toute sécurité, sans ces mots vous ne pouvez pas restaurer votre portefeuille ou envoyer des transactions et TOUS LES JETONS ARK SERONT PERDUS.",
     "BACKUP_PASSPHRASE": "Sauvegarder ce mot de passe en toute sécurité, sans ces mots, vous ne pouvez pas restaurer votre portefeuille.",
     "BACKUP_SECOND_PASSPHRASE": "Sauvegardez ce second mot de passe en toute sécurité, sans ces mots, vous ne pouvez pas déplacer vos fonds.",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Vous pouvez le modifier pour un mot de passe de votre choix, n'oubliez pas de le sauvegarder en sureté. Vous devrez le retaper pour la validation.",
