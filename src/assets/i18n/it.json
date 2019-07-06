@@ -92,15 +92,15 @@
       "FAST_EASY": "Veloce e facile",
       "GET_STARTED": "Iniziamo",
       "SECURITY": "Sicurezza",
-      "TEXT_1": "Forniamo tutti gli strumenti necessari per gestire i token ARK, sempre e ovunque, in tutto il mondo!",
+      "TEXT_1": "Forniamo tutti gli strumenti necessari per gestire i token Qredit, sempre e ovunque, in tutto il mondo!",
       "TEXT_2": "Tutti i tuoi dati sensibili sono archiviati in modo sicuro utilizzando l'algoritmo PBKDF2 e la crittografia AES-256 protetta dal tuo codice PIN",
       "TEXT_3": "Scorri tra i profili e i portafogli, controlla i tuoi saldi, invia e ricevi fondi e molto altro ancora",
       "WELCOME": "Benvenuto a bordo"
     },
     "SIGN_IN_PAGE": {
-      "ARK_WALLET": "Portafoglio ARK",
+      "ARK_WALLET": "Portafoglio Qredit",
       "CREATE_PROFILE": "Crea un profilo",
-      "SLOGAN": "Benvenuto nell'ecosistema ARK"
+      "SLOGAN": "Benvenuto nell'ecosistema Qredit"
     },
     "SIGN_OUT_PROFILE_TEXT": "Uscire dal profilo?",
     "MARKETS_PAGE": {

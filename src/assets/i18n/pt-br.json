@@ -45,9 +45,10 @@
       "VOTE_FETCH_ERROR": "Não foi possível buscar o voto atual",
       "WARNING_SELECT_WALLET_FIRST": "Você precisa selecionar uma carteira primeiro para ativar o processo de voto"
     },
-    "DELETE": "Delete",
+    "DELETE": "Deletar",
     "DONE": "Feito",
     "EDIT": "Editar",
+    "SIGN_OUT": "Sair",
     "EXIT_APP_TEXT": "Deseja sair do App?",
     "FAILED": "Falhou",
     "GENERAL": "Geral",
@@ -57,15 +58,15 @@
       "FAST_EASY": "Rápido e Fácil",
       "GET_STARTED": "Iniciar",
       "SECURITY": "Segurança",
-      "TEXT_1": "Nós fornecemos todas as ferramentas que você precisa para gerenciar suas ARK, a qualquer hora, em qualquer lugar, em todo o mundo!",
+      "TEXT_1": "Nós fornecemos todas as ferramentas que você precisa para gerenciar suas Qredit, a qualquer hora, em qualquer lugar, em todo o mundo!",
       "TEXT_2": "Todos os seus dados confidenciais são armazenados de forma segura usando o algoritmo PBKDF2 e a criptografia AES-256 protegida pelo seu código PIN",
       "TEXT_3": "Deslize entre perfis e carteiras, verifique seus saldos, envie e receba fundos e muito mais",
       "WELCOME": "Bem vindo a bordo"
     },
     "SIGN_IN_PAGE": {
-      "ARK_WALLET": "Carteira ARK",
+      "ARK_WALLET": "Carteira Qredit",
       "CREATE_PROFILE": "Criar um perfil",
-      "SLOGAN": "Bem vindo ao Ecossistema ARK"
+      "SLOGAN": "Bem vindo ao Qredit"
     },
     "SIGN_OUT_PROFILE_TEXT": "Sair do perfil?",
     "MARKETS_PAGE": {
@@ -86,7 +87,8 @@
       "NETWORK_STATUS": "Status de Rede",
       "NETWORK_TYPE": "Tipo de Rede",
       "INTERNET_DESCONNECTED": "Não foi possível conectar-se à Internet",
-      "PEER": "Peer"
+      "PEER": "Peer",
+      "VERSION": "Versão"
     },
     "NEXT": "Próximo",
     "NO": "Não",

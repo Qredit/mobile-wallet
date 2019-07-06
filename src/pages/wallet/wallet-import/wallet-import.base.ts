@@ -31,6 +31,9 @@ export abstract class BaseWalletImport {
     let privateKey;
     let publicKey;
 
+    address = address ? address.trim() : address;
+    passphrase = passphrase ? passphrase.trim() : passphrase;
+
     if (address) {
       if (!this.networkProvider.isValidAddress(address)) {
         this.toastProvider.error('WALLETS_PAGE.IMPORT_INVALID_ADDRESS');
@@ -59,8 +62,7 @@ export abstract class BaseWalletImport {
 
     let newWallet = new Wallet(!privateKey);
 
-    this.arkApiProvider.api.account
-      .get({ address })
+    this.arkApiProvider.client.getWallet(address)
       .finally(() => {
         if (!privateKey) {
           this.addWallet(newWallet);

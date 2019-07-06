@@ -21,7 +21,7 @@ import { StoredNetwork } from '@models/stored-network';
 @Injectable()
 export class UserDataProvider {
 
-  public profiles = {};
+  public profiles: { [key: string]: Profile } = {};
   public networks = {};
 
   public currentProfile: Profile;
@@ -29,6 +29,7 @@ export class UserDataProvider {
   public currentWallet: Wallet;
 
   public onActivateNetwork$: Subject<StoredNetwork> = new Subject();
+  public onUpdateNetwork$: Subject<StoredNetwork> = new Subject();
   public onCreateWallet$: Subject<Wallet> = new Subject();
   public onUpdateWallet$: Subject<Wallet> = new Subject();
   public onSelectProfile$: Subject<Profile> = new Subject();
@@ -59,6 +60,8 @@ export class UserDataProvider {
 
     this.onLogin();
     this.onClearStorage();
+
+    this.onUpdateNetwork$.subscribe(network => this.currentNetwork = network);
   }
 
   addOrUpdateNetwork(network: Network, networkId?: string): Observable<{ network: Network, id: string }> {
@@ -92,7 +95,7 @@ export class UserDataProvider {
   }
 
   getProfileByName(name: string) {
-    const profile = lodash.find(this.profiles, id => id.name.toLowerCase() === name.toLowerCase());
+    const profile = lodash.find(this.profiles, (id: any) => id.name.toLowerCase() === name.toLowerCase());
     if (profile) {
       return new Profile().deserialize(profile);
     }
@@ -124,7 +127,7 @@ export class UserDataProvider {
     if (wallet && !wallet.cipherSecondKey) {
       // wallet.secondBip38 = this.forgeProvider.encryptBip38(secondWif, pinCode, this.currentNetwork);
       wallet.cipherSecondKey = this.forgeProvider.encrypt(secondPassphrase, pinCode, wallet.address, wallet.iv);
-      return this.saveWallet(wallet, profileId, true);
+      return this.updateWallet(wallet, profileId, true);
     }
 
     return this.saveProfiles();
@@ -170,7 +173,7 @@ export class UserDataProvider {
           // wallet.secondBip38 = this.forgeProvider.encryptBip38(secondWif, newPassword, this.currentNetwork);
         }
 
-        this.saveWallet(wallet, profileId);
+        this.updateWallet(wallet, profileId);
       }
     }
 
@@ -198,7 +201,7 @@ export class UserDataProvider {
 
     wallet.isDelegate = true;
     wallet.username = userName;
-    this.saveWallet(wallet, undefined, true);
+    this.updateWallet(wallet, this.currentProfile.profileId, true);
   }
 
   getWalletByAddress(address: string, profileId: string = this.authProvider.loggedProfileId): Wallet {
@@ -209,11 +212,23 @@ export class UserDataProvider {
 
     if (profile.wallets[address]) {
       wallet = wallet.deserialize(profile.wallets[address]);
-      wallet.loadTransactions(wallet.transactions);
+      wallet.loadTransactions(wallet.transactions, this.currentNetwork);
       return wallet;
     }
 
     return null;
+  }
+
+  // Save only if wallet exists in profile
+  updateWallet(wallet: Wallet, profileId: string, notificate: boolean = false): Observable<any> {
+    if (lodash.isUndefined(profileId)) { return; }
+
+    const profile = this.getProfileById(profileId);
+    if (profile && profile.wallets[wallet.address]) {
+      return this.saveWallet(wallet, profileId, notificate);
+    }
+
+    return Observable.empty();
   }
 
   saveWallet(wallet: Wallet, profileId: string = this.authProvider.loggedProfileId, notificate: boolean = false) {
@@ -244,7 +259,7 @@ export class UserDataProvider {
     }
 
     wallet.label = label;
-    return this.saveWallet(wallet);
+    return this.updateWallet(wallet, this.currentProfile.profileId);
   }
 
   public getWalletLabel(walletOrAddress: Wallet | string, profileId?: string): string {
@@ -280,10 +295,11 @@ export class UserDataProvider {
       .map(profiles => {
         // we have to create "real" contacts here, because the "address" property was not on the contact object
         // in the first versions of the app
-        return lodash.mapValues(profiles, profile => {
-          profile.contacts = lodash.transform(profile.contacts, UserDataProvider.mapContact, {});
-          return profile;
-        });
+        return lodash.mapValues(profiles, (profile, profileId) => ({
+          ...profile,
+          profileId,
+          contacts: lodash.transform(profile.contacts, UserDataProvider.mapContact, {})
+        }));
       });
   }
 

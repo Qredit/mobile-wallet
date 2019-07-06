@@ -90,17 +90,17 @@
     "FAST_EASY": "Rapide et Facile",
     "GET_STARTED": "Commencez",
     "SECURITY": "Sécurité",
-    "TEXT_1": "Nous fournissons tous les outils dont vous avez besoin pour gérer vos jetons ARK, à tout moment, partout dans le monde !",
+    "TEXT_1": "Nous fournissons tous les outils dont vous avez besoin pour gérer vos jetons Qredit, à tout moment, partout dans le monde !",
     "TEXT_2": "Toutes vos données sensibles sont stockées en toute sécurité en utilisant l'algorithme PBKDF2 et le cryptage AES-256 protégé par votre code PIN",
     "TEXT_3": "Balayez l'écran entre les profils et les portefeuilles, vérifiez vos soldes, envoyer et recevoir des fonds et bien plus encore",
     "WELCOME": "Bienvenue"
   },
   "SIGN_IN_PAGE": {
-    "ARK_WALLET": "Portefeuille ARK",
-    "CREATE_PROFILE": "Créer un profile",
-    "SLOGAN": "Bienvenue dans l'Ecosystème ARK"
+    "ARK_WALLET": "Portefeuille Qredit",
+    "CREATE_PROFILE": "Créer un profil",
+    "SLOGAN": "Bienvenue dans l'Qredit"
   },
-  "SIGN_OUT_PROFILE_TEXT": "Se déconnecter du profile ?",
+  "SIGN_OUT_PROFILE_TEXT": "Se déconnecter du profil ?",
   "MARKETS_PAGE": {
     "MARKET_CAP": "Capitalisation",
     "MARKET_DATA": "Donnée du marché",
@@ -144,7 +144,7 @@
     "TYPE_PIN_SIGN_TRANSACTION": "Saisissez votre code PIN pour signer la transaction",
     "UPDATING": "Mise à jour du code PIN pour tous les profils et portefeuilles...",
     "WRONG": "Veuillez entrer le bon code PIN",
-    "WEAK_PIN": "NIP faible",
+    "WEAK_PIN": "Code PIN faible",
     "WEAK_PIN_DETAIL": "Le code PIN que vous avez saisi est considéré comme faible et facile à deviner. Voulez-vous vraiment l'utiliser ?"
   },
   "PROFILES_PAGE": {
@@ -182,7 +182,8 @@
     "NOTIFICATIONS": "Notifications",
     "SETTINGS": "Paramètres",
     "VERSION": "Version",
-    "WALLET_BACKUP": "Sauvegarde du portefeuille"
+    "WALLET_BACKUP": "Sauvegarde du portefeuille",
+    "WORDLIST_LANGUAGE": "Langue de phrase secrète"
   },
   "SHOW_ADVANCED": "Afficher les paramètres avancés",
   "SKIP": "Passer",

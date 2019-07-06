@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { IonicPage, LoadingController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavParams, Loading } from 'ionic-angular';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { Contact, Wallet, SendTransactionForm, WalletKeys } from '@models/model';
+import { Contact, Wallet, SendTransactionForm, WalletKeys, QRCodeScheme, StoredNetwork } from '@models/model';
 
 import { UserDataProvider } from '@providers/user-data/user-data';
 import { ContactsProvider } from '@providers/contacts/contacts';
@@ -16,24 +16,21 @@ import { Network, Fees } from 'ark-ts/model';
 import { Subject } from 'rxjs/Subject';
 
 import { TruncateMiddlePipe } from '@pipes/truncate-middle/truncate-middle';
-import { UnitsSatoshiPipe } from '@pipes/units-satoshi/units-satoshi';
 import { PinCodeComponent } from '@components/pin-code/pin-code';
 import { ConfirmTransactionComponent } from '@components/confirm-transaction/confirm-transaction';
 import { QRScannerComponent } from '@components/qr-scanner/qr-scanner';
 import * as constants from '@app/app.constants';
-import { TransactionSend } from 'ark-ts';
+import { TransactionSend, TransactionType } from 'ark-ts';
 
 import { AutoCompleteComponent } from 'ionic2-auto-complete';
 import { AutoCompleteAccount, AutoCompleteAccountType } from '@models/contact';
 import { TranslatableObject } from '@models/translate';
-import { QRCodeScheme } from '@models/model';
 import { BigNumber } from 'bignumber.js';
 import { ArkUtility } from '../../../utils/ark-utility';
 import { AddressCheckerProvider} from '@providers/address-checker/address-checker';
 import { AddressCheckResult } from '@providers/address-checker/address-check-result';
 import { AmountComponent } from '@components/amount/amount';
 import { Amount } from '@components/amount/amount.model';
-import { Loading } from 'ionic-angular/components/loading/loading';
 import { TranslateService } from '@ngx-translate/core';
 
 class CombinedResult {
@@ -57,7 +54,7 @@ enum AddressType {
 @Component({
   selector: 'page-transaction-send',
   templateUrl: 'transaction-send.html',
-  providers: [UnitsSatoshiPipe, TruncateMiddlePipe],
+  providers: [TruncateMiddlePipe],
 })
 export class TransactionSendPage implements OnInit {
   @ViewChild('sendTransactionForm') sendTransactionHTMLForm: HTMLFormElement;
@@ -71,12 +68,15 @@ export class TransactionSendPage implements OnInit {
   transaction: SendTransactionForm = {};
 
   currentWallet: Wallet;
-  currentNetwork: Network;
-  fees: Fees;
+  currentNetwork: StoredNetwork;
+  fee: number;
+  hasFeeError = false;
   addressType: AddressType = AddressType.Unknown;
   addressTypes = AddressType;
   isRecipientNameAutoSet: boolean;
   hasSent = false;
+  sendAllEnabled = false;
+  transactionType = TransactionType.SendArk;
 
   private currentAutoCompleteFieldValue: string;
   private unsubscriber$: Subject<void> = new Subject<void>();
@@ -88,7 +88,6 @@ export class TransactionSendPage implements OnInit {
     private arkApiProvider: ArkApiProvider,
     private toastProvider: ToastProvider,
     public contactsAutoCompleteService: AccountAutoCompleteService,
-    private unitsSatoshiPipe: UnitsSatoshiPipe,
     private truncateMiddlePipe: TruncateMiddlePipe,
     private addressChecker: AddressCheckerProvider,
     private loadingCtrl: LoadingController,
@@ -99,17 +98,30 @@ export class TransactionSendPage implements OnInit {
     this.currentNetwork = this.userDataProvider.currentNetwork;
   }
 
+  toggleSendAll () {
+    this.sendAllEnabled = !this.sendAllEnabled;
+
+    if (this.sendAllEnabled) {
+      this.sendAll();
+    }
+  }
+
+  get vendorFieldLength () {
+    return this.currentNetwork.vendorFieldLength || 255;
+  }
+
   sendAll() {
     const balance = Number(this.currentWallet.balance);
-    const sendableAmount = balance - this.fees.send;
+    const sendableAmount = balance - this.fee;
+
     if (sendableAmount <= 0) {
       this.toastProvider.error({
           key: 'API.BALANCE_TOO_LOW_DETAIL',
           parameters: {
             token: this.currentNetwork.token,
-            fee: ArkUtility.arktoshiToArk(this.fees.send),
+            fee: ArkUtility.arktoshiToArk(this.fee),
             amount: ArkUtility.arktoshiToArk(balance),
-            totalAmount: ArkUtility.arktoshiToArk(balance + this.fees.send),
+            totalAmount: ArkUtility.arktoshiToArk(balance + this.fee),
             balance: ArkUtility.arktoshiToArk(balance)
           }
         } as TranslatableObject,
@@ -117,7 +129,7 @@ export class TransactionSendPage implements OnInit {
       return;
     }
 
-    this.transaction.amount = this.unitsSatoshiPipe.transform(sendableAmount, true);
+    this.transaction.amount = ArkUtility.arktoshiToArk(sendableAmount, true);
     this.amountComponent.setAmount(this.transaction.amount);
   }
 
@@ -200,16 +212,13 @@ export class TransactionSendPage implements OnInit {
   }
 
   private validForm(): boolean {
-    let isValid: boolean;
-    for (const name in this.sendTransactionHTMLForm.form.controls) {
-      if (name === 'recipientAddress') {
-        continue;
-      }
-      const control = this.sendTransactionHTMLForm.form.controls[name];
-      isValid = control.valid;
-      if (!isValid) {
-        break;
-      }
+    let isValid = true;
+    if (
+      !this.sendTransactionHTMLForm.form.controls['amount'].value
+      || this.sendTransactionHTMLForm.form.controls['amount'].value <= 0
+      || (this.sendTransactionHTMLForm.form.controls['smartBridge'].value || '').length > this.vendorFieldLength
+    ) {
+      isValid = false;
     }
 
     return isValid;
@@ -258,12 +267,15 @@ export class TransactionSendPage implements OnInit {
       passphrase: result.keys.key,
       secondPassphrase: result.keys.secondKey,
       recipientId: this.transaction.recipientAddress,
+      fee: this.fee
     };
 
-    this.arkApiProvider.api.transaction.createTransaction(data).subscribe((transaction) => {
+    this.arkApiProvider.transactionBuilder.createTransaction(data).subscribe((transaction) => {
+      // The transaction will be signed again;
       this.confirmTransaction.open(transaction, result.keys, result.checkerResult);
     }, () => {
       this.toastProvider.error('TRANSACTIONS_PAGE.CREATE_TRANSACTION_ERROR');
+      this.hasNotSent();
     });
   }
 
@@ -283,7 +295,6 @@ export class TransactionSendPage implements OnInit {
   }
 
   ionViewDidLoad() {
-    this.arkApiProvider.fees.subscribe((fees) => this.fees = fees);
     this.hasNotSent();
   }
 
@@ -319,6 +330,18 @@ export class TransactionSendPage implements OnInit {
   public onAmountChange(newAmounts: Amount) {
     this.transaction.amount = newAmounts.amount;
     this.transaction.amountEquivalent = newAmounts.amountEquivalent;
+  }
+
+  public onFeeChange(newFee: number) {
+    this.fee = newFee;
+
+    if (this.sendAllEnabled) {
+      this.sendAll();
+    }
+  }
+
+  public onFeeError(hasError: boolean) {
+    this.hasFeeError = hasError;
   }
 
   private setFormValuesFromAddress(address: string, alternativeRecipientName?: string): void {

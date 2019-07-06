@@ -3,7 +3,8 @@ import arkConfig from 'ark-ts/config';
 
 import { MarketCurrency, MarketHistory, MarketTicker } from '@models/market';
 
-import { UnitsSatoshiPipe } from '@pipes/units-satoshi/units-satoshi';
+import { StoredNetwork } from './stored-network';
+import { ArkUtility } from '../utils/ark-utility';
 
 const TX_TYPES = {
   0: 'TRANSACTIONS_PAGE.SENT',
@@ -24,6 +25,7 @@ const TX_TYPES_ACTIVITY = {
 export interface SendTransactionForm {
   amount?: number;
   amountEquivalent?: number;
+  fee?: number;
   recipientAddress?: string;
   recipientName?: string;
   smartBridge?: string;
@@ -33,7 +35,7 @@ export class Transaction extends TransactionModel {
 
   public date: Date;
 
-  constructor(public address: string) {
+  constructor(public address: string, private network: StoredNetwork) {
     super();
   }
 
@@ -45,6 +47,7 @@ export class Transaction extends TransactionModel {
     }
 
     this.date = new Date(this.getTimestamp() * 1000);
+    delete self.network;
 
     return self;
   }
@@ -68,15 +71,13 @@ export class Transaction extends TransactionModel {
       price = market.getPriceByDate(marketCurrency.code, this.date);
     }
 
-    const unitsSatoshiPipe = new UnitsSatoshiPipe();
-    const amount = unitsSatoshiPipe.transform(this.getAmount(), true);
+    const amount = ArkUtility.arktoshiToArk(this.getAmount(), true);
 
     return amount * price;
   }
 
   getTimestamp() {
-    const blockchainDate = arkConfig.blockchain.date;
-    const blockchainTime = blockchainDate.getTime() / 1000;
+    const blockchainTime = new Date(this.network.epoch).getTime() / 1000;
 
     return this.timestamp + blockchainTime;
   }

@@ -6,6 +6,8 @@ import { MarketDataProvider } from '@providers/market-data/market-data';
 import { SettingsDataProvider } from '@providers/settings-data/settings-data';
 import { Network } from 'ark-ts/model';
 import { Amount } from '@components/amount/amount.model';
+import * as constants from '@app/app.constants';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'amount',
@@ -25,10 +27,12 @@ export class AmountComponent implements OnInit {
   public marketCurrency: MarketCurrency;
   public currentNetwork: Network;
 
-  public constructor(userDataProvider: UserDataProvider,
-                     private marketDataProvider: MarketDataProvider,
-                     private settingsDataProvider: SettingsDataProvider,
-                     private changeDetectorRef: ChangeDetectorRef) {
+  public constructor(
+    userDataProvider: UserDataProvider,
+    private marketDataProvider: MarketDataProvider,
+    private settingsDataProvider: SettingsDataProvider,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.currentNetwork = userDataProvider.currentNetwork;
   }
 
@@ -48,7 +52,12 @@ export class AmountComponent implements OnInit {
 
   public onInputToken() {
     const precision = this.marketCurrency.code === 'btc' ? 8 : 2;
-    this.amountEquivalent = +(this.amount * this.marketCurrency.price).toFixed(precision);
+    try {
+      this.amount = Number((new BigNumber(this.amount.toString())).toFixed(constants.ARKTOSHI_DP));
+      this.amountEquivalent = +(this.amount * this.marketCurrency.price).toFixed(precision);
+    } catch {
+      return;
+    }
     this.hasChanged();
   }
 

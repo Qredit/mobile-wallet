@@ -6,6 +6,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { SettingsDataProvider } from '@providers/settings-data/settings-data';
 import { UserDataProvider } from '@providers/user-data/user-data';
 import { ContactsProvider } from '@providers/contacts/contacts';
+import { ArkApiProvider } from '@providers/ark-api/ark-api';
 import { UserSettings, Wallet, Transaction } from '@models/model';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -25,12 +26,15 @@ export class LocalNotificationsProvider {
     private settingsDataProvider: SettingsDataProvider,
     private translateService: TranslateService,
     private backgroundMode: BackgroundMode,
+    private arkApiProvider: ArkApiProvider,
   ) { }
 
   // Start provider
-  public init () {
+  public init() {
     this.backgroundMode.setDefaults({ silent: true });
-    this.backgroundMode.on('activate').subscribe(() => this.backgroundMode.disableWebViewOptimizations());
+    this.backgroundMode.on('activate').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
 
     this.settingsDataProvider.settings.subscribe(settings => this.prepare(settings));
     this.settingsDataProvider.onUpdate$.subscribe(settings => this.prepare(settings)); // Watch for updates
@@ -51,7 +55,7 @@ export class LocalNotificationsProvider {
   }
 
   // Make sure the app is allowed to show notifications
-  private checkPermission () {
+  private checkPermission() {
     return new Promise((resolve, reject) => {
       this.localNotifications.hasPermission().then(status => {
         if (status) {
@@ -68,7 +72,7 @@ export class LocalNotificationsProvider {
   }
 
   // Scan each wallet and find new transactions
-  watchTransactions (wallets: any) {
+  watchTransactions(wallets: any) {
     for (const address in wallets) {
       const wallet = wallets[address];
       // Convert object to class
@@ -90,9 +94,9 @@ export class LocalNotificationsProvider {
             const w = new Wallet();
             Object.assign(w, wallet);
 
-            w.loadTransactions(response.transactions);
+            w.loadTransactions(response.transactions, this.arkApiProvider.network);
 
-            this.userDataProvider.saveWallet(w, wallet.profileId);
+            this.userDataProvider.updateWallet(w, wallet.profileId);
 
             // Get only the new transaction and notify the user
             const newTransactions = lodash.drop(w.transactions, localLength);
@@ -103,7 +107,7 @@ export class LocalNotificationsProvider {
   }
 
   // Notify each new transaction
-  private notifyTransaction (transactions: Transaction[], wallet: any) {
+  private notifyTransaction(transactions: Transaction[], wallet: any) {
     const notifications = [];
 
     for (const transaction of transactions) {
@@ -131,11 +135,10 @@ export class LocalNotificationsProvider {
     }
 
     this.localNotifications.schedule(notifications);
-    this.backgroundMode.wakeUp();
   }
 
   // Watch all tasks
-  private watch () {
+  private watch() {
     if (lodash.isEmpty(this.userDataProvider.profiles)) {
       return;
     }
