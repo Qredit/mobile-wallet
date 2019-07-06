@@ -25,7 +25,7 @@ export class NeoApiProvider {
   }
 
   private isValidAddress(address): boolean {
-    // since NEO addresses are the same as Qredit addresses, we can use the qredit validateAddress method ;)
+    // since NEO addresses are the same as ARK addresses, we can use the ark validateAddress method ;)
     // however we have to "hardcode the version", since it's not "network dependant" (e.g. devNet has another version)
     return this.networkProvider.isValidAddress(address, 0x17);
   }

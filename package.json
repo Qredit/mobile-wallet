@@ -1,16 +1,21 @@
 {
   "name": "qredit-mobile",
-  "version": "2.3.22",
+  "version": "2.4.14",
   "author": {
     "name": "Nayiem Willems",
     "email": "nayiem@qredit.io",
-    "url": "https://github.com/nayiemwillems"
+    "url": "https://github.com/NayiemWillems"
   },
   "contributors": [
     {
       "name": "Alex Barnsley",
       "email": "alex@ark.io",
       "url": "https://github.com/alexbarnsley"
+    },
+    {
+      "name": "Milan",
+      "email": "milan@qredit.io",
+      "url": "https://github.com/Mililiter94"
     },
     {
       "name": "Marco Valize",
@@ -69,7 +74,7 @@
     "@ngx-translate/http-loader": "2.0.0",
     "android-versions": "^1.3.0",
     "angular2-qrcode": "^2.0.1",
-    "ark-ts": "^0.3.16",
+    "ark-ts": "^0.4.0",
     "arkjs": "github:arkecosystem/ark-js#master",
     "bcryptjs": "^2.4.3",
     "bignumber.js": "^6.0.0",
@@ -79,23 +84,24 @@
     "cordova-allow-background-audio": "^1.0.2",
     "cordova-android": "7.1.2",
     "cordova-browser": "5.0.4",
-    "cordova-clipboard": "^1.2.1",
+    "cordova-clipboard": "^1.3.0",
     "cordova-custom-config": "^5.1.0",
     "cordova-ios": "4.5.5",
     "cordova-plugin-add-swift-support": "^1.7.2",
     "cordova-plugin-compat": "^1.2.0",
-    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-console": "^1.1.0",
+    "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-inappbrowser": "^3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
-    "cordova-plugin-network-information": "^2.0.1",
+    "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-qrscanner": "^3.0.1",
-    "cordova-plugin-screen-orientation": "^3.0.1",
-    "cordova-plugin-splashscreen": "^5.0.2",
-    "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-screen-orientation": "^3.0.2",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-statusbar": "^2.4.3",
     "cordova-plugin-swift-support": "^3.1.1",
-    "cordova-plugin-vibration": "^3.1.0",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-x-socialsharing": "^5.4.4",
+    "cordova-plugin-vibration": "^3.1.1",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-plugin-x-socialsharing": "^5.4.7",
     "cordova-sqlite-storage": "git+https://github.com/litehelpers/Cordova-sqlite-storage.git",
     "es6-promise-plugin": "^4.2.2",
     "iod": "^1.1.1",
@@ -107,7 +113,6 @@
     "ng2-charts": "^1.6.0",
     "ngx-filter-pipe": "^1.0.2",
     "node-forge": "^0.7.6",
-    "phonegap-nfc": "^1.0.3",
     "rxjs": "^5.5.11",
     "string-hash": "^1.1.3",
     "sw-toolbox": "3.6.0",
@@ -152,6 +157,7 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-qrscanner": {},
       "cordova-custom-config": {},
+      "cordova-plugin-console": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-screen-orientation": {},
@@ -165,8 +171,7 @@
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-sqlite-storage": {},
-      "phonegap-nfc": {}
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
       "browser",

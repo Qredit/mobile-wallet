@@ -33,6 +33,7 @@ export class SettingsDataProvider {
       'cs': 'Čeština',
       'kor': '한국어',
       'bg': 'Български',
+      'pl': 'Polish',
       'zh': '中文'
     },
     currencies: {

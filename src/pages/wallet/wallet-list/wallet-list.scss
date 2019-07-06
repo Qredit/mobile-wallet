@@ -49,12 +49,12 @@ page-wallet-list {
         .label {
           position: relative;
           max-width: 75%;
-          background: white url('../assets/img/light/wallet/background.png') no-repeat center center / cover;
+          background: white url('../assets/img/light/wallet/normal-block.png') no-repeat center center / cover;
           padding: 2em 1.5em;
           border-radius: 5px!important;
 
           &.delegate {
-            background-image: url('../assets/img/light/wallet/background.png');
+            background-image: url('../assets/img/light/wallet/delegate-block.png');
           }
 
           .address,
