@@ -1,4 +1,4 @@
-# Ark Mobile
+# Qredit Mobile
 
 <p align="center">
     <img src="./banner.png" />
@@ -6,17 +6,16 @@
 
 > A Wallet for Everyone
 
-[![Build Status](https://badgen.now.sh/circleci/github/ArkEcosystem/mobile-wallet)](https://circleci.com/gh/ArkEcosystem/mobile-wallet)
-[![Codecov](https://badgen.now.sh/codecov/c/github/arkecosystem/mobile-wallet)](https://codecov.io/gh/arkecosystem/mobile-wallet)
-[![Latest Version](https://badgen.now.sh/github/release/ArkEcosystem/mobile-wallet)](https://github.com/ArkEcosystem/mobile-wallet/releases/latest)
+[![Build Status](https://badgen.now.sh/circleci/github/Qredit/mobile-wallet)](https://circleci.com/gh/ArkEcosystem/mobile-wallet)
+[![Codecov](https://badgen.now.sh/codecov/c/github/Qredit/mobile-wallet)](https://codecov.io/gh/arkecosystem/mobile-wallet)
+[![Latest Version](https://badgen.now.sh/github/release/Qredot/mobile-wallet)](https://github.com/ArkEcosystem/mobile-wallet/releases/latest)
 [![License: MIT](https://badgen.now.sh/badge/license/MIT/green)](https://opensource.org/licenses/MIT)
 
-ARK’s mobile wallet is a hybrid application (using the same codebase for Android and iOS which helps with coordinated development). Created using Ionic framework and ARK’s [TypeScript API](https://github.com/ArkEcosystem/ark-ts) to interact with the ARK network via your mobile phone, anytime, anywhere (as long as you have an internet connection).
+Qredit’s mobile wallet is a hybrid application (using the same codebase for Android and iOS which helps with coordinated development). Created using Ionic framework and Qredit’s [TypeScript API](https://github.com/ArkEcosystem/ark-ts) to interact with the Qredit network via your mobile phone, anytime, anywhere (as long as you have an internet connection).
 
 ## Download
 
-- [Google Play](https://play.google.com/store/apps/details?id=io.ark.wallet.mobile)
-- [App Store](https://itunes.apple.com/us/app/mobile-ark/id1324625967)
+- [Google Play] (https://play.google.com/store/apps/details?id=io.qredit.wallet.mobile)
 
 ## Features
 
@@ -25,9 +24,9 @@ ARK’s mobile wallet is a hybrid application (using the same codebase for Andro
 - Encrypt access to your profile with a custom 6 digit PIN (AES256+PBKDF2).
 - Most transaction types are available: send, receive, vote, unvote, register a delegate.
 - Connects to both mainnet and devnet.
-- Option for additional profiles (separate profiles for different ARK addresses or networks).
+- Option for additional profiles (separate profiles for different Qredit addresses or networks).
 - Option to add contacts and easily transact with them.
-- Total balance of your combined ARK addresses.
+- Total balance of your combined Qredit addresses.
 - Wallet backup - input your selected PIN to decrypt your wallet and gain view of your private data.
 - Change PIN - if you want to change your encryption/decryption PIN you can easily do so.
 - Clear Data - you can clear all your data from the phone.
@@ -42,7 +41,16 @@ First follow the steps below to install the dependencies:
 ```bash
 $ npm install -g ionic cordova@7.1.0
 $ npm install
-$ ionic cordova prepare
+$ ionic cordova prepare android
+$ ionic cordova plugin rm cordova-plugin-console
+$ ionic cordova build --release android
+```
+
+Sign (android) APK:
+
+```bash
+$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore platforms/android/app/build/outputs/apk/release/my-release-key.keystore platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk HodlerCompany
+$ zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk Qredit.apk
 ```
 
 Run on device:

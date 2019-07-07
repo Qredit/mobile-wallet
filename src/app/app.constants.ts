@@ -44,7 +44,7 @@ export const PIN_ATTEMPTS_LIMIT = 3;
 export const PIN_ATTEMPTS_TIMEOUT_MILLISECONDS = 30 * 1000;
 
 // ARK
-export const PRIVACY_POLICY_URL = 'https://ark.io/PrivacyPolicy.txt';
+export const PRIVACY_POLICY_URL = 'https://qredit.io/PrivacyPolicy.txt';
 export const URI_QRCODE_SCHEME_PREFIX = 'qredit:';
 export const NUM_ACTIVE_DELEGATES = 51;
 export const TOP_WALLETS_TO_FETCH = 50;
