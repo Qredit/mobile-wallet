@@ -255,7 +255,7 @@
     "ADD_WALLET_TEXT": "Pour importer ou créer un portefeuille, cliquez sur le bouton ci-dessous",
     "ADDRESS": "Adresse",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "Le deuxième mot de passe a été crypté avec succès",
-    "BACKUP_ACCOUNT": "IMPORTANT! Sauvegardez cette 'phrase d'authentification secrète' en toute sécurité, sans ces mots vous ne pouvez pas restaurer votre portefeuille ou envoyer des transactions et TOUS LES JETONS ARK SERONT PERDUS.",
+    "BACKUP_ACCOUNT": "IMPORTANT! Sauvegardez cette 'phrase d'authentification secrète' en toute sécurité, sans ces mots vous ne pouvez pas restaurer votre portefeuille ou envoyer des transactions et TOUS LES JETONS Qredit SERONT PERDUS.",
     "BACKUP_PASSPHRASE": "Sauvegarder ce mot de passe en toute sécurité, sans ces mots, vous ne pouvez pas restaurer votre portefeuille.",
     "BACKUP_SECOND_PASSPHRASE": "Sauvegardez ce second mot de passe en toute sécurité, sans ces mots, vous ne pouvez pas déplacer vos fonds.",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Vous pouvez le modifier pour un mot de passe de votre choix, n'oubliez pas de le sauvegarder en sureté. Vous devrez le retaper pour la validation.",

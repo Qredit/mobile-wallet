@@ -247,7 +247,7 @@
       "ADD_WALLET_TEXT": "Per importare o creare un portafoglio premi sul pulsante qui sotto",
       "ADDRESS": "Indirizzo",
       "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "La seconda frase segreta è stata cifrata con successo",
-      "BACKUP_ACCOUNT": "IMPORTANTE! Salva questa frase segreta in un posto sicuro: senza queste parole non potrai ripristinare il tuo portafoglio o inviare transazioni e TUTTI I TUOI ARK ANDRANNO PERSI.",
+      "BACKUP_ACCOUNT": "IMPORTANTE! Salva questa frase segreta in un posto sicuro: senza queste parole non potrai ripristinare il tuo portafoglio o inviare transazioni e TUTTI I TUOI Qredit ANDRANNO PERSI.",
       "BACKUP_PASSPHRASE": "Salva questa frase segreta in un posto sicuro: senza queste parole non potrai ripristinare il tuo portafoglio.",
       "BACKUP_SECOND_PASSPHRASE": "Salva questa seconda frase segreta in un posto sicuro: senza queste parole non potrai spostare i tuoi fondi.",
       "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Puoi modificare una password a tua scelta. Ricordati di salvarla in un posto sicuro: sarà necessario digitarla nuovamente per la convalida.",

@@ -194,7 +194,7 @@
       "ADD_WALLET_TEXT": "Para importar ou criar uma carteira clique no botão abaixo",
       "ADDRESS": "Endereço",
       "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "A frase secreta secundária foi encriptada com sucesso",
-      "BACKUP_ACCOUNT": "IMPORTANTE! Faça o backup desta 'frase secreta' de forma segura, sem essas palavras você não pode restaurar sua carteira ou enviar transações e TODOS OS TOKENS ARK SERÃO PERDIDOS",
+      "BACKUP_ACCOUNT": "IMPORTANTE! Faça o backup desta 'frase secreta' de forma segura, sem essas palavras você não pode restaurar sua carteira ou enviar transações e TODOS OS TOKENS Qredit SERÃO PERDIDOS",
       "BACKUP_PASSPHRASE": "Faça backup da frase secreta de forma segura, sem essas palavras você não conseguirá restaurar sua carteira.",
       "BACKUP_SECOND_PASSPHRASE": "Faça backup da frase secreta secundária de forma segura, sem essas palavras você não conseguirá mover seus fundos.",
       "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Você pode editar para uma frase secreta de sua escolha. Lembre-se de fazer backup com segurança, você precisará re-digitar para validação.",

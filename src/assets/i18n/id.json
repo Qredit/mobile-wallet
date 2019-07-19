@@ -251,7 +251,7 @@
     "ADD_WALLET_TEXT": "Untuk mengimpor atau membuat dompet, klik tombol di bawah ini",
     "ADDRESS": "Alamat",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "Passphrase kedua berhasil dienkripsi",
-    "BACKUP_ACCOUNT": "PENTING! Simpan 'passphrase rahasia' ini dengan aman, tanpa daftar kata-kata ini Anda tidak dapat mengembalikan dompet Anda atau mengirim transaksi dan SEMUA ARK TOKEN AKAN HILANG.",
+    "BACKUP_ACCOUNT": "PENTING! Simpan 'passphrase rahasia' ini dengan aman, tanpa daftar kata-kata ini Anda tidak dapat mengembalikan dompet Anda atau mengirim transaksi dan SEMUA Qredit COIN AKAN HILANG.",
     "BACKUP_PASSPHRASE": "Simpan passphrase ini dengan aman, tanpa daftar kata-kata ini Anda tidak dapat mengembalikan dompet Anda.",
     "BACKUP_SECOND_PASSPHRASE": "Simpan passphrase ini dengan aman, tanpa daftar kata-kata ini Anda tidak dapat memindahkan dana Anda.",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Anda dapat mengubahnya sesuai dengan kata sandi pilihan Anda. Harap menyimpannya dengan aman, Anda perlu mengetik ulang sebagai validasi.",

@@ -243,7 +243,7 @@
     "ADD_WALLET_TEXT": "Klik op de knop onderin om een wallet te importeren of aan te maken",
     "ADDRESS": "Adres",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "De tweede passphrase is succesvol versleuteld",
-    "BACKUP_ACCOUNT": "BELANGRIJK! Sla deze 'geheime passphrase' veilig op, zonder deze woorden kan je je wallet niet herstellen of transacties verzenden en ALLE ARK TOKENS ZULLEN VERLOREN GAAN.",
+    "BACKUP_ACCOUNT": "BELANGRIJK! Sla deze 'geheime passphrase' veilig op, zonder deze woorden kan je je wallet niet herstellen of transacties verzenden en ALLE Qredit Munten ZULLEN VERLOREN GAAN.",
     "BACKUP_PASSPHRASE": "Sla deze passphrase veilig op, zonder deze woorden kan je je wallet niet herstellen.",
     "BACKUP_SECOND_PASSPHRASE": "Sla deze tweede passphrase veilig op, zonder deze woorden kan je je saldo niet verplaatsen.",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Je kunt je wachtwoord naar jouw keuze aanpassen. Vergeet hem niet veilig op te slaan, je zal hem opnieuw moeten typen ter bevestiging.",

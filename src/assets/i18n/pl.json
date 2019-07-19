@@ -94,15 +94,15 @@
     "FAST_EASY": "Szybki i prosty",
     "GET_STARTED": "Zacznij",
     "SECURITY": "Bezpieczeństwo",
-    "TEXT_1": "Dostarczamy narzędzia do zarządzania Twoimi tokenami ARK, 24/7, na całym świecie!",
+    "TEXT_1": "Dostarczamy narzędzia do zarządzania Twoimi tokenami Qredit, 24/7, na całym świecie!",
     "TEXT_2": "Twoje wrażliwe dane są bezpiecznie przechowywane przy pomocy algorytmów PBKDF2 oraz enkrypcji AES-256 chronione przez Twój kod PIN",
     "TEXT_3": "Przesuwaj między profilami i portfelami, sprawdzaj swój bilans, wysyłaj i otrzymuj środki oraz wiele więcej",
     "WELCOME": "Witamy na pokładzie"
   },
   "SIGN_IN_PAGE": {
-    "ARK_WALLET": "Portfel ARK",
+    "ARK_WALLET": "Portfel Qredit",
     "CREATE_PROFILE": "Stwórz profil",
-    "SLOGAN": "Witaj w Ekosystemie ARK"
+    "SLOGAN": "Witaj w Ekosystemie Qredit"
   },
   "SIGN_OUT_PROFILE_TEXT": "Wyloguj z profilu?",
   "MARKETS_PAGE": {
@@ -260,7 +260,7 @@
     "ADD_WALLET_TEXT": "Aby zaimportować lub stworzyć portfel, naciśnij na przycisk poniżej",
     "ADDRESS": "Adres",
     "ALERT_SUCCESSFULLY_ENCRYPTED_SECOND_PASSPHRASE": "Drugie hasło zostało pomyślnie zaszyfrowane",
-    "BACKUP_ACCOUNT": "WAŻNE! Stwórz kopię tego 'sekretnego hasła' w bezpiecznym miejscu. Bez tych słów nie będziesz w stanie odzyskać swojego portfela czy tworzyć transkacji i WSZYSTKIE TOKENY ARK ZOSTANĄ BEZPOWROTNIE STRACONE.",
+    "BACKUP_ACCOUNT": "WAŻNE! Stwórz kopię tego 'sekretnego hasła' w bezpiecznym miejscu. Bez tych słów nie będziesz w stanie odzyskać swojego portfela czy tworzyć transkacji i WSZYSTKIE TOKENY Qredit ZOSTANĄ BEZPOWROTNIE STRACONE.",
     "BACKUP_PASSPHRASE": "Stwórz kopię tego 'sekretnego hasła' w bezpiecznym miejscu, ponieważ bez tego hasła nie będziesz mógł odzyskać swojego portfela.",
     "BACKUP_SECOND_PASSPHRASE": "Stwórz kopię tego drugiego 'sekretnego hasła' w bezpiecznym miejscu, ponieważ bez tego hasła nie będziesz mógł przemieszczać swoich środków",
     "BACKUP_SECOND_PASSPHRASE_SECURELY_RETYPE_TEXT": "Możesz edytować na swoje własne hasło. Pamiętaj, aby stworzyć kopię zapasową w bezpiecznym miejscu, będziesz musiał wpisać je ponownie w celu weryfikacji ",
