@@ -28,15 +28,6 @@
       </ion-row>
     </ion-grid>
   </ion-toolbar>
-
-  <ion-row>
-      <ion-col>
-              <button ion-button color="button-blue" (click)="navCtrl.push('TransactionSendPage')" text-center class="button-continue">{{ 'SEND' | translate }}</button>
-            </ion-col>      <ion-col>
-              <button ion-button color="button-blue" (click)="openTransactionReceive()" text-center class="button-continue">{{ 'RECEIVE' | translate }}</button>
-            </ion-col>    
-          </ion-row> 
-
 </ion-header>
 
 <ion-content header-scroller>
@@ -75,6 +66,18 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+<ion-footer> 
+    <ion-row>
+    <ion-col>
+            <button ion-button color="button-blue" (click)="navCtrl.push('TransactionSendPage')" text-center class="button-continue">{{ 'SEND' | translate }}</button>
+          </ion-col>      
+          <ion-col>
+            <button ion-button color="button-blue" (click)="openTransactionReceive()" text-center class="button-continue">{{ 'RECEIVE' | translate }}</button>
+          </ion-col>    
+        </ion-row> 
+      </ion-footer>
+
+
 
 <pin-code [wallet]="wallet" (onSuccess)="onEnterPinCode($event)" #pinCode></pin-code>
 <confirm-transaction [wallet]="wallet" #confirmTransaction></confirm-transaction>
