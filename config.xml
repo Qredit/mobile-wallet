@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.qredit.wallet.mobile" version="2.4.15" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.qredit.wallet.mobile" version="2.5.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Qredit Portal</name>
     <description>Qredit</description>
     <author email="nayiem@qredit.io" href="http://qredit.io/">Qredit</author>
