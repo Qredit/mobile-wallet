@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.qredit.wallet.mobile" version="2.5.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Qredit Portal</name>
+<widget id="io.qredit.wallet.mobile" version="2.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Qredit Mobile</name>
     <description>Qredit</description>
     <author email="nayiem@qredit.io" href="http://qredit.io/">Qredit</author>
     <content src="index.html" />
@@ -13,6 +13,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <preference name="fullscreen" value="false" />
+    <preference name="UseSwiftLanguageVersion" value="5" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="BackupWebStorage" value="none" />
@@ -91,8 +92,8 @@
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
     <allow-navigation href="http://localhost:8080/*" />
-    <engine name="browser" spec="5.0.4" />
-    <engine name="ios" spec="4.5.5" />
+    <engine name="ios" spec="5.0.1" />
+    <engine name="browser" spec="^5.0.4" />
     <engine name="android" spec="7.1.2" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.4" />
     <plugin name="cordova-plugin-qrscanner" spec="^3.0.1" />
@@ -105,9 +106,11 @@
     <plugin name="cordova-plugin-device" spec="^2.0.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.3" />
     <plugin name="cordova-plugin-vibration" spec="^3.1.1" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
     <plugin name="cordova-clipboard" spec="^1.3.0" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.7">
+        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
     </plugin>
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />

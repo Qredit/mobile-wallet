@@ -26,6 +26,7 @@ export class ConfirmTransactionModal implements OnDestroy {
 
   public transaction: Transaction;
   public address: string;
+  public extra: object;
 
   public addressCheckResult: AddressCheckResult;
   public marketCurrency: MarketCurrency;
@@ -49,6 +50,7 @@ export class ConfirmTransactionModal implements OnDestroy {
   ) {
     this.transaction = this.navParams.get('transaction');
     this.addressCheckResult = this.navParams.get('addressCheckResult');
+    this.extra = this.navParams.get('extra');
     this.address = this.transaction.address;
 
     if (!this.transaction) { this.navCtrl.pop(); }
@@ -82,7 +84,7 @@ export class ConfirmTransactionModal implements OnDestroy {
               if (anyLowFee) {
                 message = translations['TRANSACTIONS_PAGE.ERROR.FEE_TOO_LOW'];
               } else {
-                const remoteMessage = lodash(errors).values().get('[0][0].message');
+                const remoteMessage = lodash.get(lodash.values(errors), '[0][0].message');
                 if (remoteMessage) {
                   message = remoteMessage;
                 } else {
