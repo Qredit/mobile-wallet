@@ -25,7 +25,7 @@ import { TransactionSend, TransactionType } from 'ark-ts';
 import { AutoCompleteComponent } from 'ionic2-auto-complete';
 import { AutoCompleteAccount, AutoCompleteAccountType } from '@models/contact';
 import { TranslatableObject } from '@models/translate';
-import { BigNumber } from 'bignumber.js';
+import BigNumber from '@utils/bignumber';
 import { ArkUtility } from '../../../utils/ark-utility';
 import { AddressCheckerProvider} from '@providers/address-checker/address-checker';
 import { AddressCheckResult } from '@providers/address-checker/address-check-result';
@@ -201,7 +201,9 @@ export class TransactionSendPage implements OnInit {
   public truncateAddressMiddle(): void {
     // When field loses focus, use ellipses to show beginning and end of address
     const addressString = this.transaction.recipientAddress;
-    this.searchBar.setValue(this.truncateMiddlePipe.transform(addressString, constants.TRANSACTION_ADDRESS_SIZE, addressString));
+    setTimeout(() => {
+      this.searchBar.setValue(this.truncateMiddlePipe.transform(addressString, constants.TRANSACTION_ADDRESS_SIZE, addressString));
+    }, 0);
   }
 
   private validAddress(): boolean {

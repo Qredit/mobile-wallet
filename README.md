@@ -88,10 +88,6 @@ To run the E2E (end to end) tests:
 $ npm run test:e2e
 ```
 
-## Security
-
-If you discover a security vulnerability within this application, please send an e-mail to security@ark.io. All security vulnerabilities will be promptly addressed.
-
 ## Contributing
 
 - If you find any bugs, submit an [issue](../../issues) or open [pull-request](../../pulls), helping us catch and fix them.
@@ -100,12 +96,14 @@ If you discover a security vulnerability within this application, please send an
 - [Contribution bounties](https://docs.ark.io/guidebook/contribution-guidelines/contributing.html).
 - [Help translate](./TRANSLATING.md).
 
+## Security
+
+If you discover a security vulnerability within this package, please send an e-mail to security@ark.io. All security vulnerabilities will be promptly addressed.
+
 ## Credits
 
-- [Lúcio Rubens](https://github.com/luciorubeens)
-- [Alex Barnsley](https://github.com/alexbarnsley)
-- [All Contributors](../../contributors)
+This project exists thanks to all the people who [contribute](../../contributors).
 
 ## License
 
-[MIT](LICENSE) © [ArkEcosystem](https://ark.io)
+[MIT](LICENSE) © [ARK Ecosystem](https://ark.io)

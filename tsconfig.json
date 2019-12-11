@@ -11,13 +11,15 @@
       "@providers/*": ["src/providers/*"],
       "@models/*": ["src/models/*"],
       "@directives/*": ["src/directives/*"],
+      "@utils/*": ["src/utils/*"],
       "@pipes/*": ["src/pipes/*"],
       "@app/*": ["src/app/*"],
-      "@root/*": ["./*"]
+      "@root/*": ["./*"],
+      "*": ["./types/*"]
     },
     "lib": [
       "dom",
-      "es2015"
+      "es2015",
     ],
     "module": "es2015",
     "target": "es5",

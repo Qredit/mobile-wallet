@@ -4,13 +4,15 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/expand';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/of';
 
 import { UserDataProvider } from '@providers/user-data/user-data';
 import { StorageProvider } from '@providers/storage/storage';
 import { ToastProvider } from '@providers/toast/toast';
 import { HttpUtils } from '@root/src/utils/http-utils';
 
-import {Transaction, TranslatableObject, BlocksEpochResponse, Wallet} from '@models/model';
+import { Transaction, TranslatableObject, Wallet } from '@models/model';
 
 import * as arkts from 'ark-ts';
 import lodash from 'lodash';
@@ -18,9 +20,14 @@ import moment from 'moment';
 import * as constants from '@app/app.constants';
 import arktsConfig from 'ark-ts/config';
 import { ArkUtility } from '../../utils/ark-utility';
-import {AccountResponse, Delegate} from 'ark-ts';
 import { StoredNetwork, FeeStatistic } from '@models/stored-network';
-import ArkClient from '../../utils/ark-client';
+import ArkClient, { WalletResponse } from '../../utils/ark-client';
+import * as ArkCrypto from '@arkecosystem/crypto';
+import { PeerDiscovery } from '@utils/ark-peer-discovery';
+import BigNumber from '@utils/bignumber';
+import { finalize, tap } from 'rxjs/operators';
+import { Delegate } from 'ark-ts';
+import { INodeConfiguration } from '@models/node';
 
 interface NodeFees {
   type: number;
@@ -30,19 +37,10 @@ interface NodeFees {
 }
 
 interface NodeFeesResponse {
-  data: NodeFees[];
-}
-
-interface NodeConfigurationConstants {
-  vendorFieldLength?: number;
-  activeDelegates?: number;
-  epoch?: Date;
-}
-
-interface NodeConfigurationResponse {
-  data: {
-    feeStatistics: FeeStatistic[],
-    constants: NodeConfigurationConstants
+  data: NodeFees[] | {
+    [group: string]: {
+      [type: string]: NodeFees;
+    }
   };
 }
 
@@ -57,6 +55,7 @@ export class ArkApiProvider {
   private _network: StoredNetwork;
   private _api: arkts.Client;
   private _client: ArkClient;
+  private _peerDiscovery: PeerDiscovery;
 
   private _fees: arkts.Fees;
   private _delegates: arkts.Delegate[];
@@ -132,158 +131,78 @@ export class ArkApiProvider {
 
     this._api = new arkts.Client(this._network);
     this._client = new ArkClient(this.network.getPeerAPIUrl(), this.httpClient);
-    this.findGoodPeer();
+    this._peerDiscovery = new PeerDiscovery(this.httpClient);
 
     // Fallback if the fetchEpoch fail
     this._network.epoch = arktsConfig.blockchain.date;
     // Fallback if the fetchNodeConfiguration fail
     this._network.activeDelegates = constants.NUM_ACTIVE_DELEGATES;
+
+    this.connectToRandomPeer().subscribe(null, (e) => console.error(e));
+
     this.userDataProvider.onUpdateNetwork$.next(this._network);
 
     this.fetchFees().subscribe();
   }
 
-  public async findGoodPeer() {
-    // Get list from active peer
-    this.client.getPeerList().subscribe(async (response) => {
-      if (response && await this.findGoodPeerFromList(response.peers)) {
-        return;
-      } else {
-        await this.tryGetFallbackPeer();
-      }
-    },
-    async () => await this.tryGetFallbackPeer());
-  }
+  private refreshPeers(): Observable<void> {
+    return new Observable(observer => {
+      const network = this._network;
+      const networkLookup = ['mainnet', 'devnet'];
+      const isKnowNetwork = lodash.includes(networkLookup, network.name);
+      const peerUrl = network.getPeerAPIUrl();
 
-  public async findGoodSeedPeer() {
-    const configNetwork = arktsConfig.networks[this._network.name];
-    let peers;
-    if (configNetwork) {
-      peers = configNetwork.peers.map(peer => {
-        const ip = peer.match(/^(\d+\.?){4}/);
-        const port = peer.match(/:\d+$/);
+      const networkOrHost = isKnowNetwork ? network.name : `${peerUrl}/api/peers`;
 
-        return {
-          ip: ip[0],
-          port: port[0].substring(1),
-          version: configNetwork.p2pVersion
-        };
-      });
-    } else {
-      peers = this.network.peerList;
-    }
+      this._peerDiscovery.find({ networkOrHost }).subscribe(discovery => {
+        discovery
+          .withLatency(300)
+          .sortBy('latency', 'asc');
 
-    if (lodash.isEmpty(peers)) {
-      return false;
-    }
-
-    await this.findGoodPeerFromList(peers);
-
-    return true;
-  }
-
-  private async tryGetFallbackPeer() {
-    if (await this.findGoodPeerFromList(this.network.peerList)) {
-      return;
-    }
-
-    // Custom network
-    if (!this.network.type) {
-      return;
-    }
-
-    // try get a peer from the hardcoded ark-ts peerlist (only works for main and devnet)
-    arkts.PeerApi
-      .findGoodPeer(this._network)
-      .subscribe((peer) => this.updateNetwork(peer),
-        () => this.toastProvider.error('API.PEER_LIST_ERROR'));
-  }
-
-  private async findGoodPeerFromList(peerList: arkts.Peer[]) {
-    if (!peerList || !peerList.length) {
-      return false;
-    }
-    const port = +(this._network.p2pPort || this._network.activePeer.port);
-    // Force P2P port if specified in the network
-    if (this._network.p2pPort) {
-      for (const peer of peerList) {
-        peer.port = +this._network.p2pPort;
-      }
-    }
-    const peersListSample = peerList.slice(0, 10);
-    const preFilteredPeers = lodash.filter(peersListSample, (peer) => {
-      if (peer['port'] !== port) {
-        return false;
-      }
-
-      if (peer.ip === this._network.activePeer.ip || peer.ip === '127.0.0.1') {
-        return false;
-      }
-
-      return true;
-    });
-
-    let filteredPeers = [];
-    if (!this._network.isV2) {
-      filteredPeers = preFilteredPeers;
-    } else {
-      const configChecks = [];
-      for (const peer of preFilteredPeers) {
-        configChecks.push(this.zone.runOutsideAngular(() =>
-          this.client.getPeerConfig(peer.ip, peer.port).toPromise()
-        ));
-      }
-
-      const peerConfigResponses = await Promise.all(configChecks.map(p => p.catch(e => e)));
-      for (const peerId in peerConfigResponses) {
-        const config = peerConfigResponses[peerId];
-        if (config && config.data) {
-          const apiConfig: any = lodash.find(config.data.plugins, (_, key) => key.split('/').reverse()[0] === 'core-api');
-          if (apiConfig && apiConfig.enabled && apiConfig.port) {
-            const peer = preFilteredPeers[peerId];
-            peer.port = apiConfig.port;
-            if (config.data.version) {
-              peer.version = config.data.version;
+        discovery
+          .findPeersWithPlugin('core-api', {
+            additional: [
+              'height',
+              'latency',
+              'version'
+            ]
+          })
+          .switchMap(peers => {
+            if (!peers.length) {
+              return discovery.findPeersWithPlugin('core-wallet-api', {
+                additional: [
+                  'height',
+                  'latency',
+                  'version'
+                ]
+              });
             }
-            filteredPeers.push(peer);
-          }
-        }
-      }
-    }
 
-    const missingHeights = [];
-    const missingHeightRequests = [];
-    for (const peerId in filteredPeers) {
-      const peer = filteredPeers[peerId];
-      if (!peer.height) {
-        missingHeights.push({
-          id: peerId,
-          peer
-        });
-        missingHeightRequests.push(this.client.getPeerSyncing(`http://${peer.ip}:${peer.port}`).toPromise());
-      }
-    }
+            return Observable.of(peers);
+          })
+          .subscribe(peers => {
+            if (peers.length) {
+              this._network.peerList = peers;
+              observer.next();
+            } else {
+              observer.error('No good peer could be found!');
+            }
+          }, (e) => observer.error(e));
+      }, (e) => observer.error(e));
+    });
+  }
 
-    if (missingHeightRequests.length) {
-      const missingHeightResponses = await Promise.all(missingHeightRequests.map(p => p.catch(e => e)));
-      for (const peerId in missingHeightResponses) {
-        const response = missingHeightResponses[peerId];
-        if (response && response.height) {
-          const missingHeight = missingHeights[peerId];
-          const peer = missingHeight.peer;
-          peer.height = response.height;
-          filteredPeers[missingHeight.peerId] = peer;
-        }
-      }
-    }
-
-    const sortedPeers = lodash.orderBy(filteredPeers, ['height', 'delay'], ['desc', 'asc']);
-    if (!sortedPeers.length) {
-      return false;
-    }
-    this._network.peerList = sortedPeers;
-    this.updateNetwork(sortedPeers[0]);
-    return true;
+  public connectToRandomPeer(): Observable<void> {
+    return Observable.create(observer => {
+      this.refreshPeers().subscribe(() => {
+        this.updateNetwork(this._network.peerList[lodash.random(this._network.peerList.length - 1)]);
+        observer.next();
+        observer.complete();
+      }, (e) => {
+        this.updateNetwork();
+        observer.error(e);
+      });
+    });
   }
 
   public fetchDelegates(numberDelegatesToGet: number, getAllDelegates = false): Observable<arkts.Delegate[]> {
@@ -341,17 +260,6 @@ export class ArkApiProvider {
 
   public createTransaction(transaction: Transaction, key: string, secondKey: string, secondPassphrase: string): Observable<Transaction> {
     return Observable.create((observer) => {
-      const configNetwork = arktsConfig.networks[this._network.name];
-      let jsNetwork;
-      if (configNetwork) {
-        jsNetwork = {
-          messagePrefix: configNetwork.name,
-          bip32: configNetwork.bip32,
-          pubKeyHash: configNetwork.version,
-          wif: configNetwork.wif,
-        };
-      }
-
       if (!arkts.PublicKey.validateAddress(transaction.address, this._network)) {
         observer.error({
           key: 'API.DESTINATION_ADDRESS_ERROR',
@@ -361,7 +269,6 @@ export class ArkApiProvider {
       }
 
       const wallet = this.userDataProvider.getWalletByAddress(transaction.address);
-      transaction.senderId = transaction.address;
 
       const totalAmount = transaction.getAmount();
       const balance = Number(wallet.balance);
@@ -382,25 +289,67 @@ export class ArkApiProvider {
 
       const epochTime = moment(this._network.epoch).utc().valueOf();
       const now = moment().valueOf();
-      transaction.timestamp = Math.floor((now - epochTime) / 1000);
 
+      const keys = ArkCrypto.Identities.Keys.fromPassphrase(key);
+
+      transaction.timestamp = Math.floor((now - epochTime) / 1000);
+      transaction.senderPublicKey = keys.publicKey;
       transaction.signature = null;
       transaction.id = null;
 
-      const keys = this.arkjs.crypto.getKeys(key, jsNetwork);
-      this.arkjs.crypto.sign(transaction, keys);
+      const data: ArkCrypto.Interfaces.ITransactionData = {
+        network: this._network.version,
+        type: ArkCrypto.Enums.TransactionType[ArkCrypto.Enums.TransactionType[transaction.type]],
+        senderPublicKey: transaction.senderPublicKey,
+        timestamp: transaction.timestamp,
+        amount: transaction.amount,
+        fee: transaction.fee,
+        vendorField: transaction.vendorField,
+        recipientId: transaction.recipientId,
+        asset: transaction.asset
+      };
 
-      secondPassphrase = secondKey || secondPassphrase;
+      this.getNextWalletNonce(wallet.address)
+        .pipe(
+          tap(nonce => {
+            if (this._network.aip11) {
+              transaction.nonce = nonce;
+              data.nonce = nonce;
+              data.version = 2;
+            }
+          }),
+          finalize(() => {
+            data.signature = ArkCrypto.Transactions.Signer.sign(data, keys);
 
-      if (secondPassphrase) {
-        const secondKeys = this.arkjs.crypto.getKeys(secondPassphrase, jsNetwork);
-        this.arkjs.crypto.secondSign(transaction, secondKeys);
-      }
+            secondPassphrase = secondKey || secondPassphrase;
 
-      transaction.id = this.arkjs.crypto.getId(transaction);
+            if (secondPassphrase) {
+              const secondKeys = ArkCrypto.Identities.Keys.fromPassphrase(secondPassphrase);
+              data.secondSignature = ArkCrypto.Transactions.Signer.secondSign(data, secondKeys);
+            }
 
-      observer.next(transaction);
-      observer.complete();
+            transaction.id = ArkCrypto.Transactions.Utils.getId(data);
+            transaction.signature = data.signature;
+            transaction.signSignature = data.secondSignature;
+            transaction.version = data.version || 1;
+
+            observer.next(transaction);
+            observer.complete();
+          })
+        )
+        .subscribe();
+    });
+  }
+
+  private getNextWalletNonce(address: string): Observable<string> {
+    return Observable.create(observer => {
+      this._client.getWallet(address).subscribe((wallet: WalletResponse) => {
+        const nonce = wallet.nonce || 0;
+        const nextNonce = new BigNumber(nonce).plus(1).toString();
+        observer.next(nextNonce);
+      },
+      () => observer.next('1'),
+      () => observer.complete());
     });
   }
 
@@ -479,31 +428,27 @@ export class ArkApiProvider {
 
     this.fetchFees().subscribe();
     this.fetchFeeStatistics().subscribe();
-    this.fetchNodeConfiguration().subscribe((response: NodeConfigurationResponse) => {
-      const { vendorFieldLength, activeDelegates, epoch } = response.data && response.data.constants || {} as NodeConfigurationConstants;
+    this.fetchNodeConfiguration().subscribe((response: INodeConfiguration) => {
+      const config = response.constants;
 
-      if (vendorFieldLength) {
-        this._network.vendorFieldLength = vendorFieldLength;
+      this._network.vendorFieldLength = config.vendorFieldLength;
+      this._network.activeDelegates = config.activeDelegates;
+      this._network.epoch = new Date(config.epoch);
+
+      if (config.aip11) {
+        this._network.aip11 = config.aip11;
       }
-      if (activeDelegates) {
-        this._network.activeDelegates = activeDelegates;
-      }
-      if (epoch) {
-        this._network.epoch = new Date(epoch);
-      }
+
+      this._client.getNodeCrypto(this._network.getPeerAPIUrl())
+        .subscribe((crypto: any) => {
+          ArkCrypto.Managers.configManager.setConfig(crypto);
+          ArkCrypto.Managers.configManager.setHeight(config.height);
+        });
     });
   }
 
-  private fetchNodeConfiguration(): Observable<NodeConfigurationResponse> {
-    if (!this._network || !this._network.isV2) {
-      return Observable.empty();
-    }
-
-    return Observable.create((observer) => {
-      this.httpClient.get(`${this._network.getPeerAPIUrl()}/api/v2/node/configuration`).subscribe((response: NodeConfigurationResponse) => {
-        observer.next(response);
-      }, e => observer.error(e));
-    });
+  private fetchNodeConfiguration(): Observable<INodeConfiguration> {
+    return this._client.getNodeConfiguration(this._network.getPeerAPIUrl());
   }
 
   private fetchFeeStatistics(): Observable<FeeStatistic[]> {
@@ -516,28 +461,38 @@ export class ArkApiProvider {
         `${this._network.getPeerAPIUrl()}/api/v2/node/fees?days=7`
       ).subscribe((response: NodeFeesResponse) => {
         const data = response.data;
-        // Converts the new response to the old template
-        const feeStatistics: FeeStatistic[] = data.map(item => ({
-          type: Number(item.type),
-          fees: {
-            minFee: Number(item.min),
-            maxFee: Number(item.max),
-            avgFee: Number(item.avg),
+        let feeStatistics: FeeStatistic[] = [];
+
+        if (Array.isArray(data)) {
+          feeStatistics = data.map(fee => ({
+            type: Number(fee.type),
+            fees: {
+              minFee: Number(fee.min),
+              maxFee: Number(fee.max),
+              avgFee: Number(fee.avg)
+            }
+          }));
+        } else {
+          const standard = data[constants.TRANSACTION_GROUPS.STANDARD];
+
+          for (const type in standard) {
+            const fee = standard[type];
+            const typeFormatted = lodash.snakeCase(type).toUpperCase();
+
+            feeStatistics.push({
+              type: constants.TRANSACTION_TYPES.GROUP_1[typeFormatted],
+              fees: {
+                minFee: Number(fee.min),
+                maxFee: Number(fee.max),
+                avgFee: Number(fee.avg)
+              }
+            });
           }
-        }));
+        }
 
         this._network.feeStatistics = feeStatistics;
-        observer.next(feeStatistics);
-      }, () => {
-        this.fetchNodeConfiguration().subscribe(
-          (response: NodeConfigurationResponse) => {
-            const data = response.data;
-            this._network.feeStatistics = data.feeStatistics;
-            observer.next(this._network.feeStatistics);
-          },
-          e => observer.error(e)
-        );
-      });
+        observer.next(this._network.feeStatistics);
+      }, (e) => observer.error(e));
     });
   }
 
