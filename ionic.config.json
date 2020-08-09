@@ -1,6 +1,8 @@
 {
-  "name": "qredit-ionic",
-  "integrations": {
-    "cordova": {}
-  }
+	"name": "ark-ionic",
+	"integrations": {
+		"cordova": {}
+	},
+	"type": "angular",
+	"id": "efb289f2"
 }
